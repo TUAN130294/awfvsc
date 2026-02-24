@@ -1,0 +1,20 @@
+{
+  "locale": "auto",
+  "techLevel": "auto",
+  "qualityLevel": "production",
+  "persona": "default",
+  "plan": {
+    "namingFormat": "{date}-{slug}",
+    "dateFormat": "YYMMDD-HHmm"
+  },
+  "paths": {
+    "plans": "plans",
+    "docs": "docs",
+    "reports": "plans/reports"
+  },
+  "hooks": {
+    "session-init": true,
+    "prompt-reminder": true,
+    "subagent-context": true
+  }
+}

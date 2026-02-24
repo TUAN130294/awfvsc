@@ -1,10 +1,8 @@
-# AWF for Claude Code VSC 🚀
+# AWF for Claude Code VSC
 
-**Antigravity Workflow Framework** — the complete development workflow system, adapted for **Claude Code** (CLI & VS Code Extension).
+**Antigravity Workflow Framework** — 15 development workflows + hooks system for **Claude Code** (CLI & VS Code Extension).
 
-15 battle-tested workflows ported from AWF with **full methodology preserved**. Only the context/brain storage is adapted to use Claude Code's native mechanisms (`CLAUDE.md`, `/memory`, `.claude/rules/`).
-
-## ⚡ Quick Install
+## Quick Install
 
 ### Windows (PowerShell)
 ```powershell
@@ -19,76 +17,121 @@ curl -fsSL https://raw.githubusercontent.com/TUAN130294/awfvsc/main/install.sh |
 ### Manual
 ```bash
 git clone https://github.com/TUAN130294/awfvsc.git
-# Windows
-xcopy /E /Y awfvsc\commands "%USERPROFILE%\.claude\commands\awf\"
-# Mac/Linux
+# Copy commands + shared
 cp -r awfvsc/commands/ ~/.claude/commands/awf/
+cp -r awfvsc/shared/ ~/.claude/commands/awf/shared/
+# Copy hooks
+mkdir -p ~/.claude/hooks/awf/lib
+cp awfvsc/hooks/*.cjs ~/.claude/hooks/awf/
+cp awfvsc/hooks/lib/* ~/.claude/hooks/awf/lib/
+# Register hooks manually (see Hook Configuration below)
 ```
 
-## 📋 Workflows
+## Workflows
 
-### 🔄 Recommended Flow
+### Recommended Flow
 ```
 /awf:init → /awf:brainstorm → /awf:plan → /awf:design → /awf:visualize → /awf:code → /awf:run → /awf:test → /awf:deploy
 ```
 
 | Command | Description |
 |---------|-------------|
-| `/awf:init` | ✨ Initialize project with proper structure |
-| `/awf:brainstorm` | 💡 Brainstorm & research ideas, create BRIEF.md |
-| `/awf:plan` | 📝 Smart Proposal + Deep Interview + Phase Generation |
-| `/awf:design` | 🎨 Technical design — DB schema, API, data flow |
-| `/awf:visualize` | 🖼️ UI/UX mockup design with component library |
-| `/awf:code` | 💻 Implement code with scope lock & safety protocols |
-| `/awf:run` | ▶️ Start application with prerequisite checks |
-| `/awf:debug` | 🐛 Systematic debugging with root cause analysis |
-| `/awf:test` | 🧪 Testing strategy & execution |
-| `/awf:deploy` | 🚀 Production deployment with checklist |
-| `/awf:refactor` | 🔧 Code refactoring & cleanup |
-| `/awf:audit` | 🔒 Security & code quality audit |
-| `/awf:review` | 👀 Code review & project handover |
-| `/awf:recap` | 📖 Save/restore context via CLAUDE.md & /memory |
-| `/awf:next` | ➡️ Smart next-step suggestions |
+| `/awf:init` | Initialize project workspace |
+| `/awf:brainstorm` | Brainstorm & research ideas → BRIEF.md |
+| `/awf:plan` | Smart Proposal + Phase Generation |
+| `/awf:design` | Technical design — DB, API, data flow |
+| `/awf:visualize` | UI/UX mockups + design specs |
+| `/awf:code` | Implement with scope lock & auto-test loop |
+| `/awf:run` | Start app with prerequisite checks |
+| `/awf:debug` | Systematic debugging with root cause analysis |
+| `/awf:test` | Testing strategy & execution |
+| `/awf:deploy` | Production deployment with full checklist |
+| `/awf:refactor` | Safe code cleanup |
+| `/awf:audit` | Security & code quality audit |
+| `/awf:review` | Project scanner & handover |
+| `/awf:recap` | Save/restore context |
+| `/awf:next` | Smart next-step suggestions |
 
-## 🧠 Context Persistence
+## Architecture
 
-AWF workflows use **Claude Code's native mechanisms** instead of AWF's KI/brain system:
+```
+~/.claude/
+├── commands/awf/           # 15 workflow commands
+│   ├── init.md ... next.md
+│   └── shared/             # Shared context (extracted from commands)
+│       ├── language-detect.md   # Auto language detection
+│       ├── personas.md          # 8 AI personas
+│       ├── non-tech-mode.md     # Tech level adaptation
+│       ├── session-protocol.md  # State management
+│       └── rules.md             # Safety rules & patterns
+├── hooks/awf/              # 3 context injection hooks
+│   ├── awf-session-init.cjs     # Project detection on startup
+│   ├── awf-prompt-reminder.cjs  # Phase progress reminders
+│   ├── awf-subagent-context.cjs # Subagent context injection
+│   └── lib/awf-config.cjs       # Shared config loader
+└── settings.json           # Hooks auto-registered here
+```
 
-| AWF (Antigravity) | Claude Code (VSC) |
-|-------------------|-------------------|
-| `.brain/context.md` | `CLAUDE.md` (auto-loaded every session) |
-| `.brain/preferences.json` | `~/.claude/CLAUDE.md` (user-level) |
-| Knowledge Items (KIs) | `/memory` (persistent notes) |
-| `awf-auto-save` skill | Update CLAUDE.md after each phase |
-| `awf-session-restore` skill | CLAUDE.md auto-loaded each session |
-| `/save-brain` | `/awf:recap` → CLAUDE.md + /memory |
+## Configuration
 
-See [CONTEXT.md](./CONTEXT.md) for detailed context management guide.
+Create `.awf.json` in your project root (or `~/.awf.json` for global defaults):
 
-## 🎯 Key Features (Preserved from AWF)
+```json
+{
+  "locale": "auto",
+  "techLevel": "auto",
+  "qualityLevel": "production",
+  "persona": "default",
+  "paths": { "plans": "plans", "docs": "docs" },
+  "hooks": { "session-init": true, "prompt-reminder": true, "subagent-context": true }
+}
+```
 
+- `locale`: `"auto"` (detect from input), `"vi"`, `"en"`
+- `techLevel`: `"auto"`, `"newbie"`, `"basic"`, `"technical"`
+- `qualityLevel`: `"mvp"`, `"production"`, `"enterprise"`
+
+## Hook Configuration (Manual)
+
+If auto-registration failed, add to `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "startup|resume|clear|compact",
+      "hooks": [{"type": "command", "command": "node ~/.claude/hooks/awf/awf-session-init.cjs"}]
+    }],
+    "UserPromptSubmit": [{
+      "hooks": [{"type": "command", "command": "node ~/.claude/hooks/awf/awf-prompt-reminder.cjs"}]
+    }],
+    "SubagentStart": [{
+      "matcher": "*",
+      "hooks": [{"type": "command", "command": "node ~/.claude/hooks/awf/awf-subagent-context.cjs"}]
+    }]
+  }
+}
+```
+
+## Uninstall
+
+```bash
+rm -rf ~/.claude/commands/awf
+rm -rf ~/.claude/hooks/awf
+# Remove hook entries from ~/.claude/settings.json manually
+```
+
+## Key Features
+
+- **Auto Language Detection** — responds in user's language (Vietnamese, English, etc.)
 - **Smart Proposal System** — AI proposes architecture, user approves
-- **Deep Interview (3 Golden Questions)** — Structured requirement gathering
-- **Phase-based Development** — Break features into manageable phases
-- **Scope Lock Protocol** — Prevents scope creep during coding
-- **Non-Tech Friendly Mode** — Adapts language to user's technical level
-- **Resilience Patterns** — Auto-recovery from common errors
-- **Vietnamese & English** — Bilingual support built-in
-- **Battle-tested** — Used in production for 100k+ LOC projects
+- **Phase-based Development** — break features into manageable phases
+- **Scope Lock Protocol** — prevents scope creep during coding
+- **Non-Tech Friendly Mode** — adapts language to user's technical level
+- **Session State Management** — persist context across sessions
+- **Zero Dependencies** — hooks use Node.js builtins only
+- **Standalone** — works without any additional frameworks
 
-## 📦 What Gets Installed
-
-Files are copied to `~/.claude/commands/awf/` (global Claude Code commands directory).
-
-- ✅ Full AWF methodology preserved (100% content, only brain storage adapted)
-- ✅ Does NOT modify existing settings or commands
-- ✅ Works with both CLI and VS Code extension
-- ✅ Standard Claude Code custom command format
-
-## 🔗 Credits
-
-Ported from the [Antigravity Workflow Framework (AWF)](https://github.com/maihde/awf).
-
-## 📄 License
+## License
 
 MIT

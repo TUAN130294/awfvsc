@@ -1,92 +1,75 @@
 ---
 description: ✅ Chạy kiểm thử
-argument-hint: [task]
+argument-hint: [feature or scope]
 ---
 
-# WORKFLOW: /test - The Quality Guardian (Smart Testing)
+# /test — The Quality Guardian
 
-Bạn là **Antigravity QA Engineer**. User không muốn app lỗi khi demo. Bạn là tuyến phòng thủ cuối cùng trước khi code đến tay người dùng.
+> Follow `shared/language-detect.md` — respond in user's language.
+> Follow `shared/non-tech-mode.md` for communication style.
 
-## Nguyên tắc: "Test What Matters" (Test những gì quan trọng, không test thừa)
+**Principle:** Test what matters, don't over-test.
 
 ---
 
-## 🎯 Non-Tech Mode (v4.0)
-
-**Đọc ~/.claude/CLAUDE.md (user preferences) để điều chỉnh ngôn ngữ:**
-
+## Flow Position
 ```
-if technical_level == "newbie":
-    → Ẩn technical output (test results raw)
-    → Chỉ báo: "X/Y tests passed" với emoji
-    → Giải thích test fail bằng ngôn ngữ đơn giản
-```
-
-### Giải thích Test cho newbie:
-
-| Thuật ngữ | Giải thích đời thường |
-|-----------|----------------------|
-| Unit test | Kiểm tra từng phần nhỏ (như kiểm tra từng món ăn) |
-| Integration test | Kiểm tra các phần kết hợp (như kiểm tra cả bữa ăn) |
-| Coverage | % code được kiểm tra (càng cao càng an toàn) |
-| Pass/Fail | Đạt/Không đạt |
-| Mock | Giả lập (như diễn tập trước khi thật) |
-
-### Báo cáo test cho newbie:
-
-```
-❌ ĐỪNG: "FAIL src/utils/calc.test.ts > calculateTotal > should add VAT"
-✅ NÊN:  "🧪 Kết quả kiểm tra:
-
-         ✅ 12 tests đạt
-         ❌ 1 test không đạt
-
-         Lỗi: Hàm tính tổng tiền chưa cộng thuế VAT
-         📍 File: utils/calc.ts
-
-         Muốn em sửa giúp không?"
+/code → [/test] ← YOU ARE HERE → /deploy
 ```
 
 ---
 
-## Giai đoạn 1: Test Strategy Selection
-1.  **Hỏi User (Đơn giản):**
-    *   "Anh muốn test kiểu nào?"
-        *   A) **Quick Check** - Chỉ test cái vừa sửa (Nhanh, 1-2 phút)
-        *   B) **Full Suite** - Chạy tất cả test có sẵn (`npm test`)
-        *   C) **Manual Verify** - Em hướng dẫn anh test tay (cho người mới)
-2.  Nếu User chọn A, hỏi tiếp: "Anh vừa sửa file/tính năng gì?"
+## Stage 1: Strategy Selection
 
-## Giai đoạn 2: Test Preparation
-1.  **Tìm Test File:**
-    *   Scan thư mục `__tests__/`, `*.test.ts`, `*.spec.ts`.
-    *   Nếu có file test cho module User nhắc → Chạy file đó.
-    *   **Nếu KHÔNG CÓ file test:**
-        *   Thông báo: "Chưa có test cho phần này. Em sẽ tạo Quick Test Script để verify."
-        *   Tự tạo một file test đơn giản trong `/scripts/quick-test-[feature].ts`.
-
-## Giai đoạn 3: Test Execution
-1.  Chạy lệnh test phù hợp:
-    *   Jest: `npm test -- --testPathPattern=[pattern]`
-    *   Custom script: `npx ts-node scripts/quick-test-xxx.ts`
-2.  Theo dõi output.
-
-## Giai đoạn 4: Result Analysis & Reporting
-1.  **Nếu PASS (Xanh):**
-    *   "Tất cả test đều PASS! Logic ổn định rồi anh."
-2.  **Nếu FAIL (Đỏ):**
-    *   Phân tích lỗi (Không chỉ báo, mà giải thích nguyên nhân).
-    *   "Test `shouldCalculateTotal` bị fail. Có vẻ do phép tính thiếu VAT."
-    *   Hỏi: "Anh muốn em sửa luôn (`/awf:debug`) hay anh tự check?"
-
-## Giai đoạn 5: Coverage Report (Optional)
-1.  Nếu User muốn biết độ phủ test:
-    *   Chạy `npm test -- --coverage`.
-    *   Báo cáo: "Hiện tại code được test 65%. Các file chưa test: [Danh sách]."
-
-## ⚠️ NEXT STEPS (Menu số):
 ```
-1️⃣ Test pass? /deploy để đưa lên production
-2️⃣ Test fail? /debug để sửa lỗi
-3️⃣ Muốn thêm test? /code để viết thêm test cases
+"How do you want to test?
+A) Quick Check — only test what just changed
+B) Full Suite — run all existing tests (npm test)
+C) Manual Verify — I'll guide you to test by hand"
+```
+
+If A: "What did you just change?"
+
+---
+
+## Stage 2: Preparation
+
+- Scan for test files: `__tests__/`, `*.test.ts`, `*.spec.ts`
+- If test exists for the module → run it
+- If NO test exists → create quick test script in `/scripts/quick-test-[feature].ts`
+
+---
+
+## Stage 3: Execution
+
+Run appropriate test command:
+- Jest: `npm test -- --testPathPattern=[pattern]`
+- Custom: `npx ts-node scripts/quick-test-xxx.ts`
+
+---
+
+## Stage 4: Results
+
+**PASS:** "All tests passed! Logic is solid."
+
+**FAIL:** Analyze root cause, explain simply, offer to fix:
+```
+"Test X failed because [simple explanation].
+Want me to fix it? (/awf:debug) or fix it yourself?"
+```
+
+---
+
+## Stage 5: Coverage (Optional)
+
+If requested: `npm test -- --coverage`
+Report: "Currently X% tested. Untested files: [list]"
+
+---
+
+## NEXT STEPS
+```
+1️⃣ Tests pass? /awf:deploy
+2️⃣ Tests fail? /awf:debug
+3️⃣ Add more tests? /code to write test cases
 ```

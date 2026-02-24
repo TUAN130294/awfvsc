@@ -1,146 +1,80 @@
 ---
 description: Khởi tạo dự án mới
-argument-hint: [task]
+argument-hint: [project-name]
 ---
 
-# WORKFLOW: /init - Khởi Tạo Dự Án
+# /init — Project Initializer
 
-**Vai trò:** Project Initializer
-**Mục tiêu:** Capture ý tưởng và tạo workspace cơ bản. KHÔNG install packages, KHÔNG setup database.
+> Follow `shared/language-detect.md` — respond in user's language.
 
-**NGÔN NGỮ: Luôn trả lời bằng tiếng Việt.**
+**Role:** Capture ý tưởng và tạo workspace cơ bản. KHÔNG install packages, KHÔNG setup database.
 
 ---
 
 ## Flow Position
-
 ```
-[/init] ← BẠN ĐANG Ở ĐÂY
-   ↓
-/brainstorm (nếu chưa rõ ý tưởng)
-   ↓
-/plan (lên kế hoạch features)
-   ↓
-/design (thiết kế kỹ thuật)
-   ↓
-/code (viết code)
+[/init] ← YOU ARE HERE → /brainstorm → /plan → /design → /code
 ```
 
 ---
 
-## Stage 1: Capture Vision (HỎI NGẮN GỌN)
+## Stage 1: Capture Vision
 
-### 1.1. Tên dự án
-"Tên dự án là gì? (VD: my-coffee-app)"
+1. **Project name:** "Tên dự án?" (VD: my-coffee-app)
+2. **Description:** "Mô tả ngắn app làm gì?" (1-2 câu)
+3. **Location:** "Tạo ở thư mục hiện tại hay chỗ khác?"
 
-### 1.2. Mô tả 1 câu
-"Mô tả ngắn gọn app làm gì? (1-2 câu)"
-
-### 1.3. Vị trí
-"Tạo ở thư mục hiện tại hay chỗ khác?"
-
-**XONG. Không hỏi thêm.**
+**Done. No more questions.**
 
 ---
 
-## Stage 2: Tạo Workspace (CHỈ TẠO FOLDER)
-
-Chỉ tạo cấu trúc folder cơ bản:
+## Stage 2: Create Workspace (FOLDERS ONLY)
 
 ```
 {project-name}/
-├── CLAUDE.md + .claude/rules/
-│   └── brain.json      # Project context (empty template)
+├── .claude/rules/
+│   └── brain.json      # Empty template
 ├── docs/
-│   └── ideas.md        # Ghi ý tưởng
-└── README.md           # Tên + mô tả
+│   └── ideas.md
+└── README.md
 ```
 
 ### brain.json template:
 ```json
 {
-  "project": {
-    "name": "{project-name}",
-    "description": "{mô tả}",
-    "created_at": "{timestamp}"
-  },
-  "tech_stack": [],
-  "features": [],
-  "decisions": []
+  "project": { "name": "{name}", "description": "{desc}", "created_at": "{timestamp}" },
+  "tech_stack": [], "features": [], "decisions": []
 }
 ```
 
 ### README.md template:
 ```markdown
 # {Project Name}
-
-{Mô tả 1 câu}
-
+{Description}
 ## Status: 🚧 Planning
-
-Dự án đang trong giai đoạn lên ý tưởng.
-
 ## Next Steps
-
-1. Gõ `/awf:brainstorm` để explore ý tưởng
-2. Hoặc `/awf:plan` nếu đã rõ muốn làm gì
+1. `/awf:brainstorm` to explore ideas
+2. `/awf:plan` if you already know what to build
 ```
 
 ---
 
-## Stage 3: Xác nhận & Hướng dẫn
+## Stage 3: Confirm & Guide
 
 ```
-✅ Đã tạo workspace cho "{project-name}"!
+✅ Workspace created for "{project-name}"!
+📁 Location: {path}
 
-📁 Vị trí: {path}
-
-🚀 BƯỚC TIẾP THEO:
-
-Chọn 1 trong 2:
-
-1️⃣ /brainstorm - Nếu chưa rõ muốn làm gì, cần explore ý tưởng
-2️⃣ /plan - Nếu đã biết rõ features cần làm
-
-💡 Tip: Newbie nên chọn /brainstorm trước!
+Next:
+1️⃣ /awf:brainstorm — explore ideas (recommended for beginners)
+2️⃣ /awf:plan — if you already know your features
 ```
 
 ---
 
-## QUAN TRỌNG - KHÔNG LÀM
-
-❌ KHÔNG install packages (để /code làm)
-❌ KHÔNG setup database (để /design làm)
-❌ KHÔNG tạo code files (để /code làm)
-❌ KHÔNG chạy npm/yarn/pnpm
-❌ KHÔNG hỏi về tech stack (AI sẽ tự quyết sau)
-
----
-
-## First-time User
-
-Nếu chưa có `CLAUDE.md + .claude/rules/~/.claude/CLAUDE.md (user preferences)`:
-
-```
-👋 Chào mừng bạn đến với AWF!
-
-Đây là lần đầu dùng. Bạn muốn:
-1️⃣ Dùng mặc định (Recommended)
-2️⃣ Tùy chỉnh (/customize)
-```
-
----
-
-## Error Handling
-
-### Folder đã tồn tại:
-```
-⚠️ Folder "{name}" đã có rồi.
-1️⃣ Dùng folder này (có thể ghi đè)
-2️⃣ Đổi tên khác
-```
-
-### Không có quyền tạo folder:
-```
-❌ Không tạo được folder. Kiểm tra quyền write nhé!
-```
+## DO NOT
+❌ Install packages (that's /code's job)
+❌ Setup database (that's /design's job)
+❌ Create code files
+❌ Run npm/yarn/pnpm
+❌ Ask about tech stack

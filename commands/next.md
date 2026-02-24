@@ -1,133 +1,56 @@
 ---
 description: ➡️ Không biết làm gì tiếp?
-argument-hint: [task]
+argument-hint: [context]
 ---
 
-# WORKFLOW: /next - The Compass v2.0 (AWF 2.0)
+# /next — The Compass
 
-Bạn là **Antigravity Navigator**. User đang bị "stuck" - không biết bước tiếp theo là gì.
+> Follow `shared/language-detect.md` — respond in user's language.
+> Follow `shared/non-tech-mode.md` for communication style.
 
-**Nhiệm vụ:** Phân tích tình trạng hiện tại và đưa ra GỢI Ý CỤ THỂ cho bước tiếp theo.
+**Mission:** Analyze current state, suggest the BEST next step.
 
 ---
 
-## 🔗 WORKFLOW NAVIGATOR (AWF 2.0) 🆕
-
-> **Nguyên tắc:** Dựa vào context, gợi ý workflow ĐÚNG trong chain
-
-### Workflow Chain Reference:
+## Workflow Chain
 ```
 /init → /plan → /design → /visualize → /code → /test → /deploy → /awf:recap
          │                                 │
-         │                                 └─→ /debug (nếu lỗi)
-         │
-         └─→ /brainstorm (nếu chưa rõ ý tưởng)
-```
-
-### Smart Suggestion Logic:
-```
-Đọc context từ:
-├── CLAUDE.md + .claude/rules/session.json (working_on, status)
-├── CLAUDE.md + .claude/rules/session_log.txt (20 dòng cuối)
-├── plans/*/plan.md (phase progress)
-└── docs/SPECS.md, docs/DESIGN.md (có hay chưa)
-
-Suggest dựa trên:
-├── Nếu chưa có SPECS → /plan hoặc /brainstorm
-├── Nếu có SPECS, chưa DESIGN → /design
-├── Nếu có DESIGN, chưa code → /visualize hoặc /code
-├── Nếu đang code → /code (tiếp) hoặc /test
-├── Nếu có lỗi → /debug
-├── Nếu test pass → /deploy
-└── Cuối session → /awf:recap
+         └→ /brainstorm (if unclear)       └→ /debug (if errors)
 ```
 
 ---
 
-## Giai đoạn 1: Quick Status Check (Tự động - KHÔNG hỏi User)
+## Stage 1: Quick Status Check (AUTO — don't ask user)
 
-### 1.1. Load Session State ⭐ v3.3 (Ưu tiên)
-
+### Read Context:
 ```
-if exists("CLAUDE.md + .claude/rules/session.json"):
-    → Parse session.json
-    → Có ngay: working_on, pending_tasks, recent_changes
-    → Skip git scan (đã có thông tin)
-else:
-    → Fallback to git scan (1.2)
+1. session.json → working_on, pending_tasks, errors
+2. session_log.txt → last 20 lines
+3. plans/*/plan.md → phase progress
+4. docs/ → SPECS.md, DESIGN.md existence
+5. Fallback: git status, git log -5, scan for TODO/FIXME
 ```
 
-**Từ session.json lấy được:**
-- `working_on.feature` → Đang làm feature nào
-- `working_on.task` → Task cụ thể
-- `working_on.status` → planning/coding/testing/debugging
-- `pending_tasks` → Việc cần làm tiếp
-- `errors_encountered` → Có lỗi chưa resolved không
-
-### 1.2. Fallback: Scan Project State (Nếu không có session.json)
-*   Kiểm tra `docs/specs/` → Có Spec nào đang "In Progress" không?
-*   Kiểm tra `git status` → Có file nào đang thay đổi dở không?
-*   Kiểm tra `git log -5` → Commit gần nhất là gì?
-*   Kiểm tra các file source code → Có TODO/FIXME nào không?
-
-### 1.3. Detect Current Phase
-Xác định User đang ở giai đoạn nào:
-*   **Chưa có gì:** Chưa có Spec, chưa có code
-*   **Có ý tưởng:** Có Spec nhưng chưa code
-*   **Đang code:** `session.working_on.status = "coding"` hoặc có file thay đổi
-*   **Đang test:** `session.working_on.status = "testing"`
-*   **Đang fix bug:** `session.working_on.status = "debugging"` hoặc có unresolved errors
-*   **Đang refactor:** Đang dọn dẹp code
-
-### 1.4. ⭐ Check Plan Progress (Mới v3.4)
-
-```
-if exists("plans/*/plan.md"):
-    → Tìm plan mới nhất (theo timestamp trong folder name)
-    → Parse bảng Phases để lấy progress
-    → Hiển thị progress bar và phase hiện tại
-```
-
-**Từ plan.md lấy được:**
-- Total phases và completed phases
-- Phase đang in-progress
-- Tasks còn lại trong phase hiện tại
+### Detect Phase:
+- Nothing exists → suggest /brainstorm or /plan
+- Has SPECS, no DESIGN → suggest /design
+- Has DESIGN, no code → suggest /visualize or /code
+- Coding in progress → suggest /code (continue) or /test
+- Has errors → suggest /debug
+- Tests pass → suggest /deploy
+- End of session → suggest /recap
 
 ---
 
-## Giai đoạn 2: Smart Recommendation (Gợi ý thông minh)
+## Stage 2: Smart Recommendation
 
-### 2.1. Nếu CHƯA CÓ GÌ:
+### With Plan + Phases:
 ```
-"🧭 **Tình trạng:** Dự án còn trống, chưa có gì.
+🧭 PROJECT PROGRESS
 
-➡️ **Bước tiếp theo:** Bắt đầu với ý tưởng!
-   Gõ `/awf:brainstorm` và kể cho em nghe ý tưởng của anh.
-
-💡 **Ví dụ:** '/brainstorm' rồi nói 'Em muốn làm app quản lý tiệm cà phê'
-
-📌 **Lưu ý:** Nếu anh đã rõ ý tưởng rồi, có thể gõ `/awf:plan` luôn."
-```
-
-### 2.2. Nếu CÓ Ý TƯỞNG (có Spec):
-```
-"🧭 **Tình trạng:** Đã có thiết kế cho [Tên feature].
-
-➡️ **Bước tiếp theo:** Bắt đầu code!
-   1️⃣ Gõ `/awf:code` để bắt đầu viết code
-   2️⃣ Hoặc `/awf:visualize` nếu muốn xem giao diện trước
-
-📋 **Spec đang có:** [Tên file spec]"
-```
-
-### 2.2.5. ⭐ Nếu CÓ PLAN VỚI PHASES (Mới v3.4):
-```
-"🧭 **TIẾN ĐỘ DỰ ÁN**
-
-📁 Plan: `plans/260117-1430-coffee-shop-orders/`
-
-📊 **Progress:**
-████████░░░░░░░░░░░░ 40% (2/5 phases)
+📁 Plan: `plans/260117-coffee-shop/`
+📊 Progress: ████████░░░░ 40% (2/5 phases)
 
 | Phase | Status |
 |-------|--------|
@@ -137,121 +60,38 @@ if exists("plans/*/plan.md"):
 | 04 Frontend | ⬜ Pending |
 | 05 Testing | ⬜ Pending |
 
-📍 **Đang làm:** Phase 03 - Backend API
+📍 Current: Phase 03 — Backend API
    └─ Task: Implement /api/orders endpoint
 
-➡️ **Bước tiếp theo:**
-   1️⃣ Tiếp tục Phase 3? `/code phase-03`
-   2️⃣ Xem chi tiết phase? Em show phase-03-backend.md
-   3️⃣ Lưu progress? `/awf:recap`"
+Next:
+1️⃣ Continue Phase 3? /code phase-03
+2️⃣ View phase details?
+3️⃣ Save progress? /awf:recap
 ```
 
-### 2.3. Nếu ĐANG CODE (có file thay đổi):
-```
-"🧭 **Tình trạng:** Đang viết code cho [Feature/File].
-
-➡️ **Bước tiếp theo:**
-   1️⃣ Tiếp tục code: Nói cho em biết cần làm gì tiếp
-   2️⃣ Test thử: Gõ `/awf:run` để chạy xem kết quả
-   3️⃣ Gặp lỗi: Gõ `/awf:debug` để tìm và sửa lỗi
-
-📂 **File đang thay đổi:** [Danh sách file]"
-```
-
-### 2.4. Nếu CÓ LỖI (phát hiện error logs hoặc test fail):
-```
-"🧭 **Tình trạng:** Có lỗi cần xử lý!
-
-➡️ **Bước tiếp theo:**
-   Gõ `/awf:debug` để em giúp tìm và sửa lỗi.
-
-🐛 **Lỗi phát hiện:** [Mô tả ngắn gọn lỗi nếu có]"
-```
-
-### 2.5. Nếu CODE XONG (không có thay đổi pending, có commit gần đây):
-```
-"🧭 **Tình trạng:** Code đã hoàn thành [Feature].
-
-➡️ **Bước tiếp theo:**
-   1️⃣ Test kỹ: Gõ `/awf:test` để kiểm tra logic
-   2️⃣ Làm tiếp: Gõ `/awf:plan` cho tính năng mới
-   3️⃣ Dọn dẹp: Gõ `/awf:refactor` nếu code cần tối ưu
-   4️⃣ Triển khai: Gõ `/awf:deploy` nếu muốn đưa lên server
-
-📝 **Commit gần nhất:** [Commit message]"
-```
+### Without Plan:
+Suggest based on detected state (see Detect Phase above).
 
 ---
 
-## Giai đoạn 3: Personalized Tips
+## Stage 3: Personalized Tips
 
-Dựa vào context, đưa thêm lời khuyên:
-
-### 3.1. Nếu đã lâu không commit:
-```
-"⚠️ **Lưu ý:** Anh chưa commit từ [thời gian].
-   Nên commit thường xuyên để không mất code!"
-```
-
-### 3.2. Nếu có nhiều TODO trong code:
-```
-"📌 **Nhắc nhở:** Có [X] TODO trong code chưa xử lý:
-   - [TODO 1]
-   - [TODO 2]"
-```
-
-### 3.3. Nếu cuối ngày:
-```
-"🌙 **Cuối buổi nhớ:** Gõ `/awf:recap` để lưu kiến thức cho mai!"
-```
+- Long time since last commit → "Remember to commit regularly!"
+- Many TODOs in code → "You have X TODOs to address"
+- End of day → "Remember /awf:recap to save for tomorrow!"
 
 ---
 
 ## Output Format
-
 ```
-🧭 **ĐANG Ở ĐÂU:**
-[Mô tả ngắn gọn tình trạng hiện tại]
-
-➡️ **LÀM GÌ TIẾP:**
-[Gợi ý cụ thể với lệnh]
-
-💡 **MẸO:**
-[Lời khuyên bổ sung nếu có]
+🧭 WHERE YOU ARE: [current state]
+➡️ WHAT TO DO: [specific suggestion with command]
+💡 TIP: [bonus advice if applicable]
 ```
 
 ---
 
-## ⚠️ LƯU Ý:
-*   KHÔNG hỏi User nhiều câu hỏi - tự phân tích và đưa gợi ý
-*   Gợi ý phải CỤ THỂ, có lệnh rõ ràng để User gõ
-*   Giọng điệu thân thiện, đơn giản, không kỹ thuật
-
----
-
-## 🛡️ RESILIENCE PATTERNS (Ẩn khỏi User)
-
-### Khi không đọc được context:
-```
-Nếu CLAUDE.md + .claude/rules/ không có hoặc corrupted:
-→ Fallback: "Em chưa có context. Anh kể sơ đang làm gì nhé!"
-→ Hoặc: "Gõ /recap để em quét lại dự án"
-```
-
-### Khi git status fail:
-```
-Nếu không có git:
-→ "Dự án chưa có Git. Anh muốn em tạo không?"
-
-Nếu permission error:
-→ Skip git analysis, dùng file timestamps thay thế
-```
-
-### Error messages đơn giản:
-```
-❌ "fatal: not a git repository"
-✅ "Dự án chưa có Git, em phân tích bằng cách khác nhé!"
-
-❌ "Cannot read properties of undefined"
-✅ "Em chưa hiểu dự án này lắm. /recap giúp em nhé?"
-```
+## Rules
+- DON'T ask user lots of questions — analyze and suggest
+- Suggestions must be SPECIFIC with exact commands to type
+- Friendly, simple, no jargon

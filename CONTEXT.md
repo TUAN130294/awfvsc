@@ -1,55 +1,56 @@
 # AWF Context Persistence for Claude Code
 
-## How AWF saves "brain" in Claude Code
+## State Files
 
-Unlike Antigravity (which uses KIs and .brain/), Claude Code uses these native mechanisms:
+| File | Location | Purpose |
+|------|----------|---------|
+| `session.json` | `.claude/rules/` | Current working state (updated per phase) |
+| `session_log.txt` | `.claude/rules/` | Append-only activity log (updated per task) |
+| `brain.json` | `.claude/rules/` | Static project knowledge (updated rarely) |
+| `handover.md` | `.claude/rules/` | Context transfer when hitting limit |
+| `CLAUDE.md` | Project root | Auto-loaded every session |
+| `~/.claude/CLAUDE.md` | Home dir | User-level preferences |
 
-### 1. CLAUDE.md (Project Level)
-- **Location:** `./CLAUDE.md` or `./.claude/CLAUDE.md`
-- **Loaded:** Automatically at every session start
-- **Use for:** Project conventions, commands, architecture, active work status
-- **AWF creates/updates via:** `/awf:init`, `/awf:recap`, `/awf:code` (post-implementation)
+## Workflow → File Mapping
 
-### 2. /memory (Persistent Notes)
-- **Command:** `/memory add "note"` or `/memory` to view/edit
-- **Stored at:** `~/.claude/projects/<project>/memory/`
-- **Use for:** Key decisions, progress tracking, quick facts
-- **AWF saves via:** `/awf:code` (phase completion), `/awf:plan` (active plan)
+| Workflow | Reads | Writes |
+|----------|-------|--------|
+| `/awf:init` | — | brain.json, README.md |
+| `/awf:brainstorm` | BRIEF.md (if exists) | docs/BRIEF.md |
+| `/awf:plan` | BRIEF.md, SPECS.md | plans/\*/plan.md + phase files, SPECS.md |
+| `/awf:design` | SPECS.md | docs/DESIGN.md |
+| `/awf:visualize` | DESIGN.md, SPECS.md | docs/design-specs.md |
+| `/awf:code` | Phase files, session.json | session.json, session_log.txt, plan.md |
+| `/awf:run` | session.json, package.json | session.json, session_log.txt |
+| `/awf:debug` | Logs, code files | session.json (errors_encountered) |
+| `/awf:test` | Test files | — |
+| `/awf:deploy` | session.json (skipped_tests) | — |
+| `/awf:audit` | All code files | docs/reports/audit_[date].md |
+| `/awf:refactor` | Target files | — |
+| `/awf:review` | All project files | docs/PROJECT_REVIEW_[date].md |
+| `/awf:recap` | All state files | session.json, brain.json |
+| `/awf:next` | session.json, plan.md | — |
 
-### 3. .claude/rules/ (Path-Specific Rules)
-- **Location:** `.claude/rules/*.md`
-- **Loaded:** When working on files matching the rule's scope
-- **Use for:** Code style per directory, API patterns, test conventions
-- **AWF creates via:** `/awf:init`
+## Hooks → Environment Variables
 
-### 4. Plan Files on Disk
-- **Location:** `plans/[feature-name]/`
-- **Contains:** plan.md + phase-XX files with task checklists
-- **Use for:** Progress tracking, scope management
-- **AWF creates via:** `/awf:plan`, updated by `/awf:code`
+The `awf-session-init` hook sets these env vars automatically:
 
-### 5. Design Docs
-- **Location:** `docs/design/`, `docs/specs/`, `docs/BRIEF.md`
-- **Use for:** Technical designs, specifications, brainstorm results
-- **AWF creates via:** `/awf:design`, `/awf:brainstorm`
+| Variable | Source | Example |
+|----------|--------|---------|
+| `AWF_PROJECT_TYPE` | Lock files, package.json | `single-repo`, `monorepo` |
+| `AWF_PACKAGE_MANAGER` | Lock file detection | `npm`, `pnpm`, `yarn`, `bun` |
+| `AWF_FRAMEWORK` | package.json deps | `next`, `react`, `vue`, `express` |
+| `AWF_GIT_BRANCH` | `git rev-parse` | `main`, `feature/auth` |
+| `AWF_PLAN_PATH` | Latest plans/ directory | `plans/260117-1430-orders` |
+| `AWF_LOCALE` | .awf.json | `auto`, `vi`, `en` |
+| `AWF_TECH_LEVEL` | .awf.json | `auto`, `newbie`, `technical` |
+| `AWF_QUALITY_LEVEL` | .awf.json | `production`, `mvp`, `enterprise` |
 
-## Mapping: AWF Brain → Claude Code
+## Config Resolution
 
-| AWF (Antigravity) | Claude Code (VSC) |
-|-------------------|-------------------|
-| `.brain/context.md` | `CLAUDE.md` |
-| `.brain/preferences.json` | `~/.claude/CLAUDE.md` |
-| Knowledge Items (KIs) | `/memory` entries |
-| `awf-auto-save` skill | Update CLAUDE.md after each phase |
-| `awf-session-restore` skill | CLAUDE.md auto-loaded each session |
-| `/save-brain` command | `/awf:recap` → CLAUDE.md + /memory |
-| `/recap` command | Read CLAUDE.md + plans/ + /memory |
-| `docs/SPECS.md` | `docs/specs/[feature].md` |
-
-## Best Practices
-
-1. **Keep CLAUDE.md under 200 lines** — it loads every session
-2. **Use /memory for quick facts** — decisions, gotchas, active plan path
-3. **Use .claude/rules/ for code patterns** — loaded only when relevant
-4. **Store detailed info in docs/** — Claude reads on demand
-5. **Update after each /awf:code phase** — keep progress current
+```
+1. Hardcoded defaults (in hooks/lib/awf-config.cjs)
+2. Global ~/.awf.json (user-wide overrides)
+3. Local .awf.json (project-level overrides)
+→ Deep merge: objects recurse, arrays replace, local wins
+```
