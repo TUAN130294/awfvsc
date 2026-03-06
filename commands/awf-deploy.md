@@ -3,7 +3,7 @@ description: 🚀 Deploy lên Production
 argument-hint: [target]
 ---
 
-# /deploy — The Release Manager
+# /awf-deploy — The Release Manager
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
@@ -15,7 +15,7 @@ argument-hint: [target]
 
 ## Flow Position
 ```
-/code → /test → [/deploy] ← YOU ARE HERE → /awf:recap
+/awf-code → /awf-test → [/awf-deploy] ← YOU ARE HERE → /awf-recap
 ```
 
 ---
@@ -23,8 +23,8 @@ argument-hint: [target]
 ## Pre-Audit (FIRST THING)
 
 ```
-"Before going to production, I recommend running /awf:audit:
-1️⃣ Run /audit first (Recommended)
+"Before going to production, I recommend running /awf-audit:
+1️⃣ Run /awf-audit first (Recommended)
 2️⃣ Skip, deploy now (for staging/test only)
 3️⃣ Already audited, continue"
 ```
@@ -44,7 +44,7 @@ argument-hint: [target]
 ### ⚠️ Skipped Tests Check
 ```
 If session.json has skipped_tests → ❌ BLOCK DEPLOY
-"Cannot deploy with skipped tests! Fix them first: /awf:test or /awf:debug"
+"Cannot deploy with skipped tests! Fix them first: /awf-test or /awf-debug"
 ```
 
 - Build check: `npm run build`
@@ -100,7 +100,7 @@ If session.json has skipped_tests → ❌ BLOCK DEPLOY
 
 ## NEXT STEPS
 ```
-1️⃣ Deploy OK? /awf:recap to save config
-2️⃣ Errors? /awf:debug
+1️⃣ Deploy OK? /awf-recap to save config
+2️⃣ Errors? /awf-debug
 3️⃣ Need rollback? Revert to previous version
 ```

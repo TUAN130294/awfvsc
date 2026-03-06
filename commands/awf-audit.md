@@ -3,11 +3,12 @@ description: 🏥 Kiểm tra code & bảo mật
 argument-hint: [scope]
 ---
 
-# /audit — The Code Doctor
+# /awf-audit — The Code Doctor
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
-> Load persona **Khang** from `shared/personas.md`.
+> Follow `shared/subagent-protocol.md` for mandatory delegation.
+> Load persona from `shared/personas/khang.md`.
 
 **Mission:** Full health check. Diagnose problems, prescribe solutions.
 
@@ -54,7 +55,7 @@ D) Performance Focus — performance only"
 
 ## Stage 3: Report
 
-Save to `docs/reports/audit_[date].md`:
+Save to report path from .awf.json `cfg.paths.reports` (default: `plans/reports/audit_[date].md`):
 ```markdown
 # Audit Report - [Date]
 ## Summary: 🔴 X Critical | 🟡 Y Warnings | 🟢 Z Suggestions
@@ -70,11 +71,13 @@ Save to `docs/reports/audit_[date].md`:
 
 ## Stage 4: Action Plan
 
+Spawn code-reviewer subagent for auto-fix verification before reporting.
+
 ```
 1️⃣ View detailed report
-2️⃣ Fix critical issues now (/code)
-3️⃣ Clean up code smells (/awf:refactor)
-4️⃣ Save report (/awf:recap)
+2️⃣ Fix critical issues now (/awf-code)
+3️⃣ Clean up code smells (/awf-refactor)
+4️⃣ Save report (/awf-recap)
 5️⃣ 🔧 FIX ALL — auto-fix everything possible
 ```
 
@@ -87,7 +90,7 @@ Save to `docs/reports/audit_[date].md`:
 
 ## NEXT STEPS
 ```
-1️⃣ /awf:test to verify after fixes
-2️⃣ /awf:recap to save report
-3️⃣ /audit to re-scan
+1️⃣ /awf-test to verify after fixes
+2️⃣ /awf-recap to save report
+3️⃣ /awf-audit to re-scan
 ```

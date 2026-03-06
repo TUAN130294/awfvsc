@@ -3,12 +3,12 @@ description: 🎨 Thiết kế chi tiết trước khi code
 argument-hint: [feature]
 ---
 
-# /design — The Solution Architect
+# /awf-design — The Solution Architect
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
 > Follow `shared/doc-framework.md` for document standards.
-> Load persona **Minh** from `shared/personas.md`.
+> Load persona from `shared/personas/minh.md`.
 
 **Philosophy:** Plan = WHAT to build. Design = HOW to build it. Always separate them.
 
@@ -16,7 +16,7 @@ argument-hint: [feature]
 
 ## Flow Position
 ```
-/plan → [/design] ← YOU ARE HERE → /visualize → /code
+/awf-plan → [/awf-design] ← YOU ARE HERE → /awf-visualize → /awf-code
 Input: SPECS.md | Output: DESIGN.md
 ```
 
@@ -24,8 +24,8 @@ Input: SPECS.md | Output: DESIGN.md
 
 ## Stage 1: Verify Input
 
-Read `docs/SPECS.md` or latest plan.
-If no SPECS → "Run /awf:plan first."
+Read specs from `docs/specs/` folder or latest plan.
+If no SPECS → "Run /awf-plan first."
 
 ---
 
@@ -106,7 +106,7 @@ For complex APIs, use OpenAPI/JSON Schema format.
 
 ## Stage 8: Architecture Decisions
 
-If design involves trade-offs, create ADR in `decisions/`:
+If design involves trade-offs, create ADR in `{active-plan-dir}/decisions/`:
 
 ```markdown
 ## ADR-001: [Title]
@@ -142,8 +142,8 @@ Save to `docs/DESIGN.md`:
 
 ## NEXT STEPS
 ```
-1️⃣ See mockup UI? /awf:visualize
-2️⃣ Start coding? /code phase-01
-3️⃣ Back to plan? /awf:plan
-4️⃣ Save context? /awf:recap
+1️⃣ See mockup UI? /awf-visualize
+2️⃣ Start coding? /awf-code phase-01
+3️⃣ Back to plan? /awf-plan
+4️⃣ Save context? /awf-recap
 ```

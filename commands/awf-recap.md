@@ -3,7 +3,7 @@ description: 🧠 Tóm tắt & phục hồi context
 argument-hint: [scope]
 ---
 
-# /recap — The Memory Retriever
+# /awf-recap — The Memory Retriever
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
@@ -18,17 +18,12 @@ argument-hint: [scope]
 ## Stage 1: Fast Context Load
 
 ### Load Order:
-```
-1. handover.md → if exists, use it, delete after resume
-2. session.json + session_log.txt (last 20 lines) → primary state
-3. brain.json → static project knowledge
-4. Fallback: git log + file scan (if no state files)
-```
+See `shared/session-protocol.md` Read Order section.
 
 ### If no state files:
 - Scan: docs/specs/ (in-progress specs), package.json (tech stack)
 - Git: `git log -10 --oneline`, `git status`
-- Suggest: "No memory files yet. Run /awf:recap at end of session to create them!"
+- Suggest: "No memory files yet. Run /awf-recap at end of session to create them!"
 
 ---
 
@@ -66,13 +61,13 @@ argument-hint: [scope]
 
 ```
 "What do you want to do?
-A) Continue where I left off → /code or /debug
-B) Start something new → /awf:plan
-C) Check everything first → /awf:audit"
+A) Continue where I left off → /awf-code or /awf-debug
+B) Start something new → /awf-plan
+C) Check everything first → /awf-audit"
 ```
 
 ---
 
 ## Tips
-- Use `/awf:recap` every morning before starting
-- Use `/awf:recap` every evening to save progress for tomorrow
+- Use `/awf-recap` every morning before starting
+- Use `/awf-recap` every evening to save progress for tomorrow

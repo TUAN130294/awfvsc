@@ -15,21 +15,21 @@
 
 | Workflow | Reads | Writes |
 |----------|-------|--------|
-| `/awf:init` | — | brain.json, README.md |
-| `/awf:brainstorm` | BRIEF.md (if exists) | docs/BRIEF.md |
-| `/awf:plan` | BRIEF.md, SPECS.md | plans/\*/plan.md + phase files, SPECS.md |
-| `/awf:design` | SPECS.md | docs/DESIGN.md |
-| `/awf:visualize` | DESIGN.md, SPECS.md | docs/design-specs.md |
-| `/awf:code` | Phase files, session.json | session.json, session_log.txt, plan.md |
-| `/awf:run` | session.json, package.json | session.json, session_log.txt |
-| `/awf:debug` | Logs, code files | session.json (errors_encountered) |
-| `/awf:test` | Test files | — |
-| `/awf:deploy` | session.json (skipped_tests) | — |
-| `/awf:audit` | All code files | docs/reports/audit_[date].md |
-| `/awf:refactor` | Target files | — |
-| `/awf:review` | All project files | docs/PROJECT_REVIEW_[date].md |
-| `/awf:recap` | All state files | session.json, brain.json |
-| `/awf:next` | session.json, plan.md | — |
+| `/awf-init` | — | brain.json, README.md |
+| `/awf-brainstorm` | BRIEF.md (if exists) | docs/BRIEF.md |
+| `/awf-plan` | BRIEF.md, docs/specs/ | plans/\*/plan.md + phase files, docs/specs/ |
+| `/awf-design` | docs/specs/ | docs/DESIGN.md |
+| `/awf-visualize` | DESIGN.md, docs/specs/ | docs/design-specs.md |
+| `/awf-code` | Phase files, session.json | session.json, session_log.txt, plan.md |
+| `/awf-run` | session.json, package.json | session.json, session_log.txt |
+| `/awf-debug` | Logs, code files | session.json (errors_encountered) |
+| `/awf-test` | Test files | — |
+| `/awf-deploy` | session.json (skipped_tests) | — |
+| `/awf-audit` | All code files | plans/reports/audit_[date].md |
+| `/awf-refactor` | Target files | — |
+| `/awf-review` | All project files | docs/PROJECT_REVIEW_[date].md |
+| `/awf-recap` | All state files | session.json, brain.json |
+| `/awf-next` | session.json, plan.md | — |
 
 ## Hooks → Environment Variables
 

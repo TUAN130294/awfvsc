@@ -3,18 +3,21 @@ description: ✅ Chạy kiểm thử
 argument-hint: [feature or scope]
 ---
 
-# /test — The Quality Guardian
+# /awf-test — The Quality Guardian
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
+> Follow `shared/subagent-protocol.md` for mandatory delegation.
 
 **Principle:** Test what matters, don't over-test.
+
+> Note: /awf-test is the tester target workflow — it is called BY other commands' subagent delegation, not as an orchestrator itself.
 
 ---
 
 ## Flow Position
 ```
-/code → [/test] ← YOU ARE HERE → /deploy
+/awf-code → [/awf-test] ← YOU ARE HERE → /awf-deploy
 ```
 
 ---
@@ -55,7 +58,7 @@ Run appropriate test command:
 **FAIL:** Analyze root cause, explain simply, offer to fix:
 ```
 "Test X failed because [simple explanation].
-Want me to fix it? (/awf:debug) or fix it yourself?"
+Want me to fix it? (/awf-debug) or fix it yourself?"
 ```
 
 ---
@@ -69,7 +72,7 @@ Report: "Currently X% tested. Untested files: [list]"
 
 ## NEXT STEPS
 ```
-1️⃣ Tests pass? /awf:deploy
-2️⃣ Tests fail? /awf:debug
-3️⃣ Add more tests? /code to write test cases
+1️⃣ Tests pass? /awf-deploy
+2️⃣ Tests fail? /awf-debug
+3️⃣ Add more tests? /awf-code to write test cases
 ```

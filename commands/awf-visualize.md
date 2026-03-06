@@ -3,11 +3,11 @@ description: 🎨 Thiết kế giao diện
 argument-hint: [screen-name]
 ---
 
-# /visualize — The Creative Partner
+# /awf-visualize — The Creative Partner
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
-> Load persona **Mai** from `shared/personas.md`.
+> Load persona from `shared/personas/mai.md`.
 
 **Mission:** Turn "vibe" into beautiful, usable, professional UI.
 
@@ -15,9 +15,9 @@ argument-hint: [screen-name]
 
 ## Flow Position
 ```
-/plan → /design → [/visualize] ← YOU ARE HERE → /code
-Input: DESIGN.md, SPECS.md | Output: design-specs.md
-⚠️ /design = LOGIC (DB, flow) | /visualize = VISUAL (colors, fonts, mockups)
+/awf-plan → /awf-design → [/awf-visualize] ← YOU ARE HERE → /awf-code
+Input: DESIGN.md, docs/specs/ | Output: design-specs.md
+⚠️ /awf-design = LOGIC (DB, flow) | /awf-visualize = VISUAL (colors, fonts, mockups)
 ```
 
 ---
@@ -25,11 +25,11 @@ Input: DESIGN.md, SPECS.md | Output: design-specs.md
 ## Stage 0: Context Load + Quick Interview
 
 ```
-If SPECS + DESIGN exist:
+If docs/specs/ + DESIGN exist:
 → List screens to design, ask which first
 
-If SPECS only, no DESIGN:
-→ Suggest /design first, or proceed with questions
+If docs/specs/ only, no DESIGN:
+→ Suggest /awf-design first, or proceed with questions
 
 If nothing exists:
 → Quick Interview (3 questions):
@@ -125,8 +125,8 @@ Follow `shared/session-protocol.md` — log each design decision.
 
 ## NEXT STEPS
 ```
-1️⃣ UI OK? /code to add logic
-2️⃣ Design another screen? Continue /awf:visualize
+1️⃣ UI OK? /awf-code to add logic
+2️⃣ Design another screen? Continue /awf-visualize
 3️⃣ Edit this screen? Tell me what to change
-4️⃣ Save and rest? /awf:recap
+4️⃣ Save and rest? /awf-recap
 ```

@@ -3,21 +3,21 @@ description: ▶️ Chạy ứng dụng
 argument-hint: [mode]
 ---
 
-# /run — The Application Launcher
+# /awf-run — The Application Launcher
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
 > Follow `shared/session-protocol.md` for session state updates.
-> Load persona **Đức** from `shared/personas.md`.
+> Load persona from `shared/personas/duc.md`.
 
-**Principle:** User types /run, AI handles everything. One command to rule them all.
+**Principle:** User types /awf-run, AI handles everything. One command to rule them all.
 
 ---
 
 ## Flow Position
 ```
-/code → [/run] ← YOU ARE HERE → /test or /deploy
-         ↓ (if failed) → /debug
+/awf-code → [/awf-run] ← YOU ARE HERE → /awf-test or /awf-deploy
+         ↓ (if failed) → /awf-debug
 ```
 
 ---
@@ -35,7 +35,11 @@ Auto-scan project:
 
 ## Stage 2: Pre-Run Checks
 
-1. **Dependencies:** `node_modules/` exists? If not → `npm install`
+1. **Dependencies:** Check based on detected package manager:
+   - **Node.js**: Use AWF_PACKAGE_MANAGER from brain.json (check lock files: package-lock.json→npm, yarn.lock→yarn, pnpm-lock.yaml→pnpm, bun.lockb→bun)
+   - **Python**: pip install -r requirements.txt / poetry install / pipenv install
+   - **Docker**: docker-compose up --build (skip dependency step)
+   - **Other**: Ask user for install command
 2. **Port check:** Default port (3000, 8080) available? If blocked → ask to kill or use alternate
 
 ---
@@ -83,8 +87,8 @@ Tips:
 🔧 Trying auto-fix...
 [if fixable] → ✅ Fixed! Retrying...
 [if not fixable] →
-1️⃣ Try again: /awf:run
-2️⃣ Debug: /awf:debug
+1️⃣ Try again: /awf-run
+2️⃣ Debug: /awf-debug
 3️⃣ Skip, do something else
 ```
 
@@ -92,9 +96,9 @@ Tips:
 
 ## NEXT STEPS
 ```
-1️⃣ Check code → /awf:test
-2️⃣ Got errors → /awf:debug
-3️⃣ Tweak UI → /awf:visualize
-4️⃣ Done → /awf:recap
-5️⃣ Go live → /awf:deploy
+1️⃣ Check code → /awf-test
+2️⃣ Got errors → /awf-debug
+3️⃣ Tweak UI → /awf-visualize
+4️⃣ Done → /awf-recap
+5️⃣ Go live → /awf-deploy
 ```

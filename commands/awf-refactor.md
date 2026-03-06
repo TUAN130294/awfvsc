@@ -3,10 +3,11 @@ description: 🧹 Dọn dẹp & tối ưu code
 argument-hint: [file or module]
 ---
 
-# /refactor — The Code Gardener
+# /awf-refactor — The Code Gardener
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
+> Follow `shared/subagent-protocol.md` for mandatory delegation.
 
 **Mission:** Clean up code WITHOUT changing logic. Safety first.
 
@@ -73,14 +74,16 @@ Show comparison: "Before: [old] → After: [new] — Logic unchanged."
 
 ## Stage 6: Handover
 
+Spawn tester subagent after execution, code-reviewer subagent before completion report.
+
 Report: X files cleaned, Y functions split, Z lines removed.
-Recommend: `/awf:test` to confirm nothing broke.
+Recommend: `/awf-test` to confirm nothing broke.
 
 ---
 
 ## NEXT STEPS
 ```
-1️⃣ /awf:test to verify logic unchanged
+1️⃣ /awf-test to verify logic unchanged
 2️⃣ Problems? Rollback to backup branch
-3️⃣ OK? /awf:recap to save
+3️⃣ OK? /awf-recap to save
 ```

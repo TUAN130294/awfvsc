@@ -31,38 +31,38 @@ cp awfvsc/hooks/lib/* ~/.claude/hooks/awf/lib/
 
 ### Recommended Flow
 ```
-/awf:init → /awf:brainstorm → /awf:plan → /awf:design → /awf:visualize → /awf:code → /awf:run → /awf:test → /awf:deploy
+/awf-init → /awf-brainstorm → /awf-plan → /awf-design → /awf-visualize → /awf-code → /awf-run → /awf-test → /awf-deploy
 ```
 
 | Command | Description |
 |---------|-------------|
-| `/awf:init` | Initialize project workspace |
-| `/awf:brainstorm` | Brainstorm & research ideas → BRIEF.md |
-| `/awf:plan` | Smart Proposal + Phase Generation |
-| `/awf:design` | Technical design — DB, API, data flow |
-| `/awf:visualize` | UI/UX mockups + design specs |
-| `/awf:code` | Implement with scope lock & auto-test loop |
-| `/awf:run` | Start app with prerequisite checks |
-| `/awf:debug` | Systematic debugging with root cause analysis |
-| `/awf:test` | Testing strategy & execution |
-| `/awf:deploy` | Production deployment with full checklist |
-| `/awf:refactor` | Safe code cleanup |
-| `/awf:audit` | Security & code quality audit |
-| `/awf:review` | Project scanner & handover |
-| `/awf:recap` | Save/restore context |
-| `/awf:next` | Smart next-step suggestions |
+| `/awf-init` | Initialize project workspace |
+| `/awf-brainstorm` | Brainstorm & research ideas → BRIEF.md |
+| `/awf-plan` | Smart Proposal + Phase Generation |
+| `/awf-design` | Technical design — DB, API, data flow |
+| `/awf-visualize` | UI/UX mockups + design specs |
+| `/awf-code` | Implement with scope lock & auto-test loop |
+| `/awf-run` | Start app with prerequisite checks |
+| `/awf-debug` | Systematic debugging with root cause analysis |
+| `/awf-test` | Testing strategy & execution |
+| `/awf-deploy` | Production deployment with full checklist |
+| `/awf-refactor` | Safe code cleanup |
+| `/awf-audit` | Security & code quality audit |
+| `/awf-review` | Project scanner & handover |
+| `/awf-recap` | Save/restore context |
+| `/awf-next` | Smart next-step suggestions |
 
 ## Architecture
 
 ```
 ~/.claude/
 ├── commands/awf/           # 15 workflow commands
-│   ├── init.md ... next.md
+│   ├── awf-init.md ... awf-next.md
 │   └── shared/             # Shared context (extracted from commands)
 │       ├── doc-framework.md     # 4-tier document hierarchy + templates
 │       ├── subagent-protocol.md # Mandatory delegation + review gates
 │       ├── language-detect.md   # Auto language detection
-│       ├── personas.md          # 8 AI personas
+│       ├── personas/            # 8 AI personas (split per command)
 │       ├── non-tech-mode.md     # Tech level adaptation
 │       ├── session-protocol.md  # State management
 │       └── rules.md             # Safety rules & patterns
@@ -114,6 +114,11 @@ If auto-registration failed, add to `~/.claude/settings.json`:
   }
 }
 ```
+
+### How Hooks Config Works
+- `settings.json` controls hook **registration** (whether Claude Code calls the hook)
+- `.awf.json` `hooks` section controls hook **execution** (hook checks this and exits early if disabled)
+- To fully disable a hook: set `false` in `.awf.json` (hooks respect this flag internally)
 
 ## Uninstall
 

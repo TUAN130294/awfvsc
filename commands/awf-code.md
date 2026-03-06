@@ -3,7 +3,7 @@ description: 💻 Viết code theo Spec
 argument-hint: [task or phase]
 ---
 
-# /code — The Universal Coder
+# /awf-code — The Universal Coder
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
@@ -11,7 +11,7 @@ argument-hint: [task or phase]
 > Follow `shared/session-protocol.md` for checkpoints.
 > Follow `shared/doc-framework.md` for document standards.
 > Follow `shared/subagent-protocol.md` for mandatory delegation.
-> Load persona **Tuấn** from `shared/personas.md`.
+> Load persona from `shared/personas/tuan.md`.
 
 **Mission:** Code right, code clean, code safe. AUTO test and fix until pass.
 
@@ -19,7 +19,7 @@ argument-hint: [task or phase]
 
 ## Flow Position
 ```
-/plan → /design → /visualize → [/code] ← YOU ARE HERE → /test → /deploy
+/awf-plan → /awf-design → /awf-visualize → [/awf-code] ← YOU ARE HERE → /awf-test → /awf-deploy
 ```
 
 ---
@@ -27,10 +27,10 @@ argument-hint: [task or phase]
 ## Stage 0: Context Detection
 
 ```
-/code phase-01    → Read phase file from plan, Single Phase mode
-/code all-phases  → Execute ALL phases sequentially
-/code [task desc] → Find spec in docs/specs/, Spec-Based mode
-/code (empty)     → Check session.json for current phase, or ask
+/awf-code phase-01    → Read phase file from plan, Single Phase mode
+/awf-code all-phases  → Execute ALL phases sequentially
+/awf-code [task desc] → Find spec in docs/specs/, Spec-Based mode
+/awf-code (empty)     → Check session.json for current phase, or ask
 ```
 
 ### Pre-Code DoD Check (MANDATORY)
@@ -45,7 +45,7 @@ Store DoD items in session.json for tracking:
 ```
 1. Confirm: show phase list, ask starting point
 2. Loop: code each phase → auto-test → save progress → brief summary
-3. Stop conditions: test fails 3x, user Ctrl+C, context >80%
+3. Stop conditions: test fails 3x, user Ctrl+C, after 3+ phases completed OR 15+ file reads → suggest /awf-recap for handover
 ```
 
 ### Save Current Plan to Session
@@ -81,7 +81,7 @@ Input validation, error handling, security, performance, logging.
 - Self-correction: auto-fix missing imports, types, duplicated code
 
 ### UI Implementation (PRODUCTION Level)
-If mockup from /visualize exists:
+If mockup from /awf-visualize exists:
 - ⚠️ Match layout EXACTLY (grid cols, spacing, colors)
 - Responsive: Mobile (375px), Tablet (768px), Desktop (1280px+)
 - All interaction states: default, hover, active, focus, disabled
@@ -90,7 +90,12 @@ If mockup from /visualize exists:
 
 ## Stage 4: Auto Test Loop (MUST delegate — see `shared/subagent-protocol.md`)
 
-**CRITICAL:** DO NOT write or run tests yourself. Spawn a `tester` subagent.
+### Subagent Delegation (size-gated)
+- **Small change** (1-2 files, <50 lines): inline test + review, skip finalization subagents
+- **Medium change** (3-5 files): spawn tester + code-reviewer, inline finalization
+- **Large change** (6+ files or new feature): full pipeline below
+
+**CRITICAL:** DO NOT write or run tests yourself for medium/large changes. Spawn a `tester` subagent.
 
 ```
 Code done → Spawn tester subagent → Auto-run related tests
@@ -110,10 +115,7 @@ Code done → Spawn tester subagent → Auto-run related tests
 | ENTERPRISE | Unit + Integration + E2E |
 
 ### Skip Test (if user chooses)
-- Record in session.json `skipped_tests`
-- Add `// TODO: FIX TEST` comment
-- Show warning in handovers
-- BLOCK /deploy if skipped tests exist
+See `shared/session-protocol.md` Skipped Tests Tracking section.
 
 ---
 
@@ -127,11 +129,12 @@ Follow `shared/session-protocol.md`:
 
 ## Stage 6: Handover (MUST delegate — see `shared/subagent-protocol.md`)
 
-**Finalization is MANDATORY and requires 3 subagents:**
+**Finalization (size-gated):**
 
-1. **`project-manager`** subagent → Update plan/phase status, mark complete
-2. **`docs-manager`** subagent → Update `./docs` if changes warrant
-3. **`git-manager`** subagent → Commit with conventional format (ask user)
+- **Small/Medium:** Inline plan status update + docs check, then spawn `git-manager`
+- **Large:**
+  1. PARALLEL: Spawn `finalizer` subagent (update plan/phase status + docs)
+  2. SEQUENTIAL: After finalizer completes, spawn `git-manager`
 
 ### DoD Verification (BLOCKING)
 Before handover, verify ALL Definition of Done items from phase file:
@@ -154,13 +157,13 @@ Before handover, verify ALL Definition of Done items from phase file:
 ```
 If coding by phase:
 1️⃣ Next task in phase
-2️⃣ Next phase? /code phase-XX
-3️⃣ Check progress? /awf:next
-4️⃣ Save context? /awf:recap
+2️⃣ Next phase? /awf-code phase-XX
+3️⃣ Check progress? /awf-next
+4️⃣ Save context? /awf-recap
 
 If standalone:
-1️⃣ Run app? /awf:run
-2️⃣ Test? /awf:test
-3️⃣ Got errors? /awf:debug
-4️⃣ Save? /awf:recap
+1️⃣ Run app? /awf-run
+2️⃣ Test? /awf-test
+3️⃣ Got errors? /awf-debug
+4️⃣ Save? /awf-recap
 ```

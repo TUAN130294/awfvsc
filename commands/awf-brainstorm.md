@@ -3,7 +3,7 @@ description: 💡 Brainstorm & Research ý tưởng
 argument-hint: [idea]
 ---
 
-# /brainstorm — The Discovery Phase
+# /awf-brainstorm — The Discovery Phase
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
@@ -14,7 +14,7 @@ argument-hint: [idea]
 
 ## Flow Position
 ```
-/init → [/brainstorm] ← YOU ARE HERE → /plan → /design → /code
+/awf-init → [/awf-brainstorm] ← YOU ARE HERE → /awf-plan → /awf-design → /awf-code
 Output: docs/BRIEF.md
 ```
 
@@ -95,7 +95,7 @@ Created: [Date]
 ### 🎁 Phase 2
 ### 💭 Backlog
 ## 6. Complexity & Risks
-## 7. Next → /awf:plan
+## 7. Next → /awf-plan
 ```
 
 ---
@@ -103,7 +103,7 @@ Created: [Date]
 ## Stage 6: Handoff
 
 ```
-1️⃣ Go to /awf:plan now
+1️⃣ Go to /awf-plan now
 2️⃣ Edit — need to adjust something
 3️⃣ Save — need more time to think
 ```

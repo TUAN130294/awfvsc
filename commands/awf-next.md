@@ -3,7 +3,7 @@ description: ➡️ Không biết làm gì tiếp?
 argument-hint: [context]
 ---
 
-# /next — The Compass
+# /awf-next — The Compass
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
@@ -14,9 +14,9 @@ argument-hint: [context]
 
 ## Workflow Chain
 ```
-/init → /plan → /design → /visualize → /code → /test → /deploy → /awf:recap
+/awf-init → /awf-plan → /awf-design → /awf-visualize → /awf-code → /awf-test → /awf-deploy → /awf-recap
          │                                 │
-         └→ /brainstorm (if unclear)       └→ /debug (if errors)
+         └→ /awf-brainstorm (if unclear)       └→ /awf-debug (if errors)
 ```
 
 ---
@@ -33,13 +33,13 @@ argument-hint: [context]
 ```
 
 ### Detect Phase:
-- Nothing exists → suggest /brainstorm or /plan
-- Has SPECS, no DESIGN → suggest /design
-- Has DESIGN, no code → suggest /visualize or /code
-- Coding in progress → suggest /code (continue) or /test
-- Has errors → suggest /debug
-- Tests pass → suggest /deploy
-- End of session → suggest /recap
+- Nothing exists → suggest /awf-brainstorm or /awf-plan
+- Has SPECS, no DESIGN → suggest /awf-design
+- Has DESIGN, no code → suggest /awf-visualize or /awf-code
+- Coding in progress → suggest /awf-code (continue) or /awf-test
+- Has errors → suggest /awf-debug
+- Tests pass → suggest /awf-deploy
+- End of session → suggest /awf-recap
 
 ---
 
@@ -64,9 +64,9 @@ argument-hint: [context]
    └─ Task: Implement /api/orders endpoint
 
 Next:
-1️⃣ Continue Phase 3? /code phase-03
+1️⃣ Continue Phase 3? /awf-code phase-03
 2️⃣ View phase details?
-3️⃣ Save progress? /awf:recap
+3️⃣ Save progress? /awf-recap
 ```
 
 ### Without Plan:
@@ -78,7 +78,7 @@ Suggest based on detected state (see Detect Phase above).
 
 - Long time since last commit → "Remember to commit regularly!"
 - Many TODOs in code → "You have X TODOs to address"
-- End of day → "Remember /awf:recap to save for tomorrow!"
+- End of day → "Remember /awf-recap to save for tomorrow!"
 
 ---
 

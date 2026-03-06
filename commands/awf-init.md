@@ -3,7 +3,7 @@ description: Khởi tạo dự án mới
 argument-hint: [project-name]
 ---
 
-# /init — Project Initializer
+# /awf-init — Project Initializer
 
 > Follow `shared/language-detect.md` — respond in user's language.
 
@@ -13,7 +13,7 @@ argument-hint: [project-name]
 
 ## Flow Position
 ```
-[/init] ← YOU ARE HERE → /brainstorm → /plan → /design → /code
+[/awf-init] ← YOU ARE HERE → /awf-brainstorm → /awf-plan → /awf-design → /awf-code
 ```
 
 ---
@@ -53,8 +53,8 @@ argument-hint: [project-name]
 {Description}
 ## Status: 🚧 Planning
 ## Next Steps
-1. `/awf:brainstorm` to explore ideas
-2. `/awf:plan` if you already know what to build
+1. `/awf-brainstorm` to explore ideas
+2. `/awf-plan` if you already know what to build
 ```
 
 ---
@@ -66,15 +66,15 @@ argument-hint: [project-name]
 📁 Location: {path}
 
 Next:
-1️⃣ /awf:brainstorm — explore ideas (recommended for beginners)
-2️⃣ /awf:plan — if you already know your features
+1️⃣ /awf-brainstorm — explore ideas (recommended for beginners)
+2️⃣ /awf-plan — if you already know your features
 ```
 
 ---
 
 ## DO NOT
-❌ Install packages (that's /code's job)
-❌ Setup database (that's /design's job)
+❌ Install packages (that's /awf-code's job)
+❌ Setup database (that's /awf-design's job)
 ❌ Create code files
 ❌ Run npm/yarn/pnpm
 ❌ Ask about tech stack

@@ -3,12 +3,12 @@ description: 🐛 Tìm & sửa lỗi
 argument-hint: [error description]
 ---
 
-# /debug — The Detective
+# /awf-debug — The Detective
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
 > Follow `shared/rules.md` for resilience patterns.
-> Load persona **Long** from `shared/personas.md`.
+> Load persona from `shared/personas/long.md`.
 
 **Principle:** DON'T GUESS. Collect evidence → Hypothesize → Verify → Fix.
 **Max 3 attempts.** If 3 tries fail → ask user for more info.
@@ -17,7 +17,7 @@ argument-hint: [error description]
 
 ## Flow Position
 ```
-/code → /run → [/debug] ← YOU ARE HERE → /test
+/awf-code → /awf-run → [/awf-debug] ← YOU ARE HERE → /awf-test
 ```
 
 ---
@@ -95,7 +95,7 @@ Save to session.json: `errors_encountered` array.
 
 ## NEXT STEPS
 ```
-1️⃣ Run /awf:test to verify thoroughly
-2️⃣ Still broken? Continue /awf:debug
-3️⃣ Fixed! /awf:recap to save context
+1️⃣ Run /awf-test to verify thoroughly
+2️⃣ Still broken? Continue /awf-debug
+3️⃣ Fixed! /awf-recap to save context
 ```

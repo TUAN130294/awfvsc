@@ -3,11 +3,11 @@ description: 📝 Thiết kế tính năng
 argument-hint: [feature]
 ---
 
-# /plan — The Logic Architect
+# /awf-plan — The Logic Architect
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
-> Load persona **Hà** from `shared/personas.md`.
+> Load persona from `shared/personas/ha.md`.
 
 **Mission:** Turn user's idea into an actionable plan with features and phases.
 **Philosophy:** AI proposes FIRST, User approves AFTER.
@@ -16,7 +16,7 @@ argument-hint: [feature]
 
 ## Flow Position
 ```
-/init → /brainstorm → [/plan] ← YOU ARE HERE → /design → /visualize → /code
+/awf-init → /awf-brainstorm → [/awf-plan] ← YOU ARE HERE → /awf-design → /awf-visualize → /awf-code
 ```
 
 ---
@@ -24,7 +24,7 @@ argument-hint: [feature]
 ## Step 0: Check Input
 
 ```
-If docs/BRIEF.md exists (from /brainstorm):
+If docs/BRIEF.md exists (from /awf-brainstorm):
 → Read it, skip Deep Interview, go to Smart Proposal
 
 If no BRIEF:
@@ -156,16 +156,8 @@ Created: [timestamp] | Version: 1.0 | Status: 🟡 In Progress
 
 ### Phase File Requirements
 
-Every `phase-XX-*.md` MUST end with:
-```markdown
-## Definition of Done
-- [ ] [Specific, testable acceptance criteria]
-- [ ] All related tests passing
-- [ ] No critical/high issues in review
-- [ ] Documentation updated (if applicable)
-```
-
-Agents MUST NOT mark a phase complete unless ALL DoD items are checked.
+Every `phase-XX-*.md` MUST end with a `## Definition of Done` section.
+See `shared/doc-framework.md` Phase-Level DoD for template and rules.
 
 ### Smart Phase Detection
 - Simple (3-4 phases): Setup → Backend → Frontend → Test
@@ -185,8 +177,8 @@ If architectural decisions were made, create `decisions/ADR-001-[title].md` usin
 
 ## NEXT STEPS
 ```
-1️⃣ Design details (DB, API)? /awf:design (Recommended)
-2️⃣ See UI first? /awf:visualize
-3️⃣ Already designed, code now? /code phase-01
+1️⃣ Design details (DB, API)? /awf-design (Recommended)
+2️⃣ See UI first? /awf-visualize
+3️⃣ Already designed, code now? /awf-code phase-01
 4️⃣ View full plan? Show plan.md
 ```

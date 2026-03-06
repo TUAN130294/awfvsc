@@ -3,10 +3,11 @@ description: 📊 Tổng quan & Bàn giao dự án
 argument-hint: [purpose]
 ---
 
-# /review — The Project Scanner
+# /awf-review — The Project Scanner
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
+> Follow `shared/subagent-protocol.md` for mandatory delegation.
 
 **Mission:** Scan entire project, create easy-to-understand report for handoff or health check.
 
@@ -25,6 +26,8 @@ argument-hint: [purpose]
 ---
 
 ## Stage 2: Auto-Scan
+
+Spawn code-reviewer subagent for specialized security scan if health check mode.
 
 1. Directory structure (top 3 levels, skip node_modules/.git/dist)
 2. package.json → tech stack, scripts, dependencies
@@ -71,8 +74,8 @@ Save to `docs/PROJECT_REVIEW_[date].md`
 
 ## NEXT STEPS
 ```
-1️⃣ Fix issues? /awf:debug or /awf:refactor
-2️⃣ Add features? /awf:plan
-3️⃣ Handoff context? /awf:recap
-4️⃣ Continue coding? /code
+1️⃣ Fix issues? /awf-debug or /awf-refactor
+2️⃣ Add features? /awf-plan
+3️⃣ Handoff context? /awf-recap
+4️⃣ Continue coding? /awf-code
 ```
