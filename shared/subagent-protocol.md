@@ -41,18 +41,12 @@ At each gate, verify:
 3. ✅ Subagent reports reviewed
 4. ✅ Scope has not crept beyond original plan
 
-## Task Tracking
+## Subagent Spawning
 
-Use Claude's Task tool for subagent management:
-
-```
-TaskCreate  → Spawn subagent with specific task
-TaskGet     → Check subagent progress
-TaskUpdate  → Mark complete or add notes
-TaskList    → Overview all active tasks
-```
-
-**Rule:** If a workflow completes with 0 Task tool calls during testing/review/finalize, it is **INCOMPLETE**.
+Use Claude Code's **Agent** tool to spawn subagents:
+- Provide clear, scoped prompt with file paths and context
+- Wait for subagent completion before next gate
+- Validation: If workflow completes with 0 subagent spawns during test/review/finalize → INCOMPLETE
 
 ## Subagent Context Injection
 

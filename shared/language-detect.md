@@ -20,4 +20,5 @@ Detect the language of user's input and respond in the SAME language.
 ```
 
 ## Default
-If ambiguous or first message is a slash command only → Vietnamese.
+If ambiguous or first message is a slash command only → English.
+Vietnamese requires explicit signal: Vietnamese text, locale:"vi" in .awf.json, or user request.

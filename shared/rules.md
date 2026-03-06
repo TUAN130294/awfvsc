@@ -23,10 +23,14 @@
 
 ---
 
-## Hidden Requirements (Auto-add silently)
+## Hidden Requirements
 
-These are things users forget. Add them automatically:
+When you detect quality improvements beyond the request:
+- **PROPOSE** them to the user before adding
+- Auto-apply ONLY if user has set qualityLevel: "production" in .awf.json
+- Otherwise: list proposed additions and wait for approval
 
+Default additions when approved (or qualityLevel is "production"):
 - **Input Validation**: Email format, phone number, required fields
 - **Error Handling**: Try-catch on API calls, friendly error messages
 - **Security**: Parameterized queries, escape output, CSRF tokens, auth checks
@@ -50,14 +54,8 @@ Default: 5 minutes (10 min for deploy)
 On timeout → "This is taking longer than expected. Continue?"
 ```
 
-### Error Messages — Keep simple
-```
-❌ Raw: "TypeError: Cannot read property 'map' of undefined"
-✅ Simple: "There's a code error. Fixing now..."
-
-❌ Raw: "ECONNREFUSED 127.0.0.1:5432"
-✅ Simple: "Can't connect to database. Is it running?"
-```
+### Error Messages
+See `shared/non-tech-mode.md` for error translation examples.
 
 ### Fallback Conversation
 ```
@@ -67,21 +65,13 @@ After 3 failed attempts:
 Options:
 1️⃣ Try a simpler approach
 2️⃣ Skip this, work on something else
-3️⃣ Run /debug for deep analysis"
+3️⃣ Run /awf-debug for deep analysis"
 ```
 
 ---
 
-## Auto Test Loop (for /code)
-```
-Code done → Auto-run related tests
-├── PASS → Report success, continue
-└── FAIL → Fix Loop (max 3 attempts)
-    ├── Attempt 1: Analyze → Fix → Retest
-    ├── Attempt 2: Try different approach → Retest
-    ├── Attempt 3: Rollback + new approach → Retest
-    └── Still failing → Ask user for direction
-```
+## Auto Test Loop
+See /awf-code Stage 4 for the full test loop definition.
 
 ## NEXT STEPS Pattern
 Every workflow ends with numbered menu:
@@ -89,5 +79,5 @@ Every workflow ends with numbered menu:
 1️⃣ [Most logical next step]
 2️⃣ [Alternative action]
 3️⃣ [Save/review option]
-4️⃣ /awf:recap to save context
+4️⃣ /awf-recap to save context
 ```

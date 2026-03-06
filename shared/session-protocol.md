@@ -7,9 +7,10 @@
 | `session.json` | Current working state | Per PHASE completion | ~450 |
 | `session_log.txt` | Append-only activity log | Per TASK completion | ~20 |
 | `brain.json` | Static project knowledge | Rarely (end of session) | ~400 |
-| `handover.md` | Context transfer on limit | When context > 80% | ~500 |
+| `handover.md` | Context transfer on limit | After 3+ phases or lengthy session | ~500 |
 
-Location: `CLAUDE.md + .claude/rules/` or project root `.claude/rules/`
+Location: `<project-root>/.claude/rules/`
+All session state files are project-scoped, not user-scoped.
 
 ---
 
@@ -41,6 +42,12 @@ Location: `CLAUDE.md + .claude/rules/` or project root `.claude/rules/`
 [HH:MM] RUN FAILED: EADDRINUSE port 3000
 ```
 
+### Rotation
+When session_log.txt exceeds 200 lines:
+1. Archive to session_log_{YYYYMMDD}.txt
+2. Keep last 50 lines in session_log.txt
+3. Only last 50 lines are active context
+
 ## brain.json Structure
 ```json
 {
@@ -54,9 +61,13 @@ Location: `CLAUDE.md + .claude/rules/` or project root `.claude/rules/`
 
 ---
 
-## Read Order (for /recap, /next)
+## Read Order (for /awf-recap, /awf-next)
 ```
-1. handover.md → if exists, use it, then delete after resume
+0. CONTEXT.md (on session start only — canonical state file mapping)
+1. handover.md → if exists:
+   a. Read and restore state
+   b. Rename to handover.md.consumed
+   c. Delete .consumed only after session.json confirms restored state
 2. session.json + session_log.txt (last 20 lines) → primary state
 3. brain.json → static project knowledge
 4. Fallback: git log + file scan
@@ -69,7 +80,7 @@ Location: `CLAUDE.md + .claude/rules/` or project root `.claude/rules/`
 | After each TASK | Append 1 line to session_log.txt |
 | After each PHASE | Update session.json + plan.md progress |
 | Before user input | Append "WAITING: [question]" to log |
-| Context > 80% | Write handover.md with full state |
+| After 3 completed phases or lengthy session (15+ tool calls) | Proactively suggest writing handover.md via /awf-recap |
 | End of session | Update brain.json if new knowledge |
 
 ---
@@ -105,7 +116,7 @@ Total progress: ██░░░░░░░░ 17% (1/6 phases)
 
 Next?
 1️⃣ Continue to next phase
-2️⃣ Save and rest (/awf:recap)
+2️⃣ Save and rest (/awf-recap)
 3️⃣ Review this phase
 ```
 
@@ -121,5 +132,5 @@ Next?
 ```
 - Add `// TODO: FIX TEST` comment in code
 - Show warning in every handover
-- BLOCK /deploy if skipped tests exist
-- Remind at start of each session via /recap
+- BLOCK /awf-deploy if skipped tests exist
+- Remind at start of each session via /awf-recap
