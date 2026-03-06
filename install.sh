@@ -42,6 +42,8 @@ cp "$TMP/hooks/lib/"* "$HOOK_DEST/lib/"
 
 # Merge hooks into settings.json
 echo "  [4/5] Configuring hooks..."
+# Backup existing settings.json
+[ -f "$SETTINGS" ] && cp "$SETTINGS" "$SETTINGS.bak" 2>/dev/null
 if command -v node >/dev/null 2>&1; then
     node -e "
 const fs = require('fs');
@@ -90,11 +92,11 @@ COUNT=$(ls "$CMD_DEST"/*.md 2>/dev/null | wc -l | tr -d ' ')
 echo "  [5/5] Installed $COUNT workflows + 3 hooks!"
 echo ""
 echo "  Done! Use in Claude Code:"
-echo "     /awf:plan   - Plan features"
-echo "     /awf:code   - Write code"
-echo "     /awf:debug  - Fix bugs"
-echo "     /awf:deploy - Deploy to prod"
+echo "     /awf-plan   - Plan features"
+echo "     /awf-code   - Write code"
+echo "     /awf-debug  - Fix bugs"
+echo "     /awf-deploy - Deploy to prod"
 echo ""
-echo "  Full list: /awf:<TAB> in Claude Code"
+echo "  Full list: /awf-<TAB> in Claude Code"
 echo "  Config: ~/.awf.json (customize locale, quality, etc.)"
 echo ""

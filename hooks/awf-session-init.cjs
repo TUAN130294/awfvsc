@@ -43,7 +43,7 @@ try {
   if (env.length) parts.push(env.join(' | '));
 
   parts.push('');
-  parts.push('AWF commands: /awf:plan, /awf:code, /awf:debug, /awf:test, /awf:deploy, /awf:recap, /awf:next');
+  parts.push('AWF commands: /awf-plan, /awf-code, /awf-debug, /awf-test, /awf-deploy, /awf-recap, /awf-next');
   parts.push('Shared rules: Read shared/rules.md for safety rules. Read shared/language-detect.md for language.');
 
   process.stdout.write(parts.join('\n'));

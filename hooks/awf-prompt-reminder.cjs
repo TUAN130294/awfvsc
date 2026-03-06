@@ -34,14 +34,15 @@ try {
   }
 
   // Read session state
+  let parsedSession = null;
   const sessionPaths = [
-    path.join(process.cwd(), '.claude', 'rules', 'session.json'),
-    path.join(process.cwd(), 'CLAUDE.md')
+    path.join(process.cwd(), '.claude', 'rules', 'session.json')
   ];
   for (const sp of sessionPaths) {
     if (fs.existsSync(sp) && sp.endsWith('.json')) {
       try {
         const session = JSON.parse(fs.readFileSync(sp, 'utf8'));
+        parsedSession = session;
         if (session.working_on && session.working_on.task) {
           parts.push(`<awf-reminder>Task: ${session.working_on.task} (${session.working_on.status || 'active'})</awf-reminder>`);
         }
@@ -60,11 +61,10 @@ try {
     }
   }
 
-  // Read DoD from current phase file
+  // Read DoD from current phase file (reuse cached session)
   if (planPath) {
     try {
-      const session = (() => { try { return JSON.parse(fs.readFileSync(path.join(process.cwd(), '.claude', 'rules', 'session.json'), 'utf8')); } catch { return {}; } })();
-      const currentPhase = session.working_on && session.working_on.current_phase;
+      const currentPhase = parsedSession && parsedSession.working_on && parsedSession.working_on.current_phase;
       if (currentPhase) {
         const phaseFiles = fs.readdirSync(planPath).filter(f => f.includes(currentPhase));
         if (phaseFiles.length) {

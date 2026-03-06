@@ -47,7 +47,7 @@ function writeEnv(key, value) {
   const envFile = process.env.CLAUDE_ENV_FILE;
   if (!envFile || value == null) return;
   try {
-    const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\$/g, '\\$').replace(/`/g, '\\`');
     fs.appendFileSync(envFile, `export ${key}="${escaped}"\n`);
   } catch {}
 }
@@ -107,7 +107,10 @@ function isHookEnabled(hookName) {
 }
 
 function readStdin() {
-  try { return JSON.parse(fs.readFileSync(0, 'utf8')); } catch { return {}; }
+  try {
+    if (process.stdin.isTTY) return {};
+    return JSON.parse(fs.readFileSync(0, 'utf8'));
+  } catch { return {}; }
 }
 
 function findLatestPlan() {

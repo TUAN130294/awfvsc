@@ -95,8 +95,9 @@ try {
 
 # Create default .awf.json if not exists
 $globalAwf = Join-Path $env:USERPROFILE ".awf.json"
-if (-not (Test-Path $globalAwf)) {
-    Copy-Item "$tmp\.awf.json.example" $globalAwf
+$exampleFile = Join-Path $tmp ".awf.json.example"
+if ((-not (Test-Path $globalAwf)) -and (Test-Path $exampleFile)) {
+    Copy-Item $exampleFile $globalAwf
 }
 
 # Cleanup
@@ -107,11 +108,11 @@ $count = (Get-ChildItem $cmdDest -Filter "*.md").Count
 Write-Host "  [5/5] Installed $count workflows + 3 hooks!" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Done! Use in Claude Code:" -ForegroundColor Green
-Write-Host "     /awf:plan   - Plan features" -ForegroundColor White
-Write-Host "     /awf:code   - Write code" -ForegroundColor White
-Write-Host "     /awf:debug  - Fix bugs" -ForegroundColor White
-Write-Host "     /awf:deploy - Deploy to prod" -ForegroundColor White
+Write-Host "     /awf-plan   - Plan features" -ForegroundColor White
+Write-Host "     /awf-code   - Write code" -ForegroundColor White
+Write-Host "     /awf-debug  - Fix bugs" -ForegroundColor White
+Write-Host "     /awf-deploy - Deploy to prod" -ForegroundColor White
 Write-Host ""
-Write-Host "  Full list: /awf:<TAB> in Claude Code" -ForegroundColor DarkGray
+Write-Host "  Full list: /awf-<TAB> in Claude Code" -ForegroundColor DarkGray
 Write-Host "  Config: ~/.awf.json (customize locale, quality, etc.)" -ForegroundColor DarkGray
 Write-Host ""
