@@ -59,6 +59,8 @@ cp awfvsc/hooks/lib/* ~/.claude/hooks/awf/lib/
 ├── commands/awf/           # 15 workflow commands
 │   ├── init.md ... next.md
 │   └── shared/             # Shared context (extracted from commands)
+│       ├── doc-framework.md     # 4-tier document hierarchy + templates
+│       ├── subagent-protocol.md # Mandatory delegation + review gates
 │       ├── language-detect.md   # Auto language detection
 │       ├── personas.md          # 8 AI personas
 │       ├── non-tech-mode.md     # Tech level adaptation
@@ -66,7 +68,7 @@ cp awfvsc/hooks/lib/* ~/.claude/hooks/awf/lib/
 │       └── rules.md             # Safety rules & patterns
 ├── hooks/awf/              # 3 context injection hooks
 │   ├── awf-session-init.cjs     # Project detection on startup
-│   ├── awf-prompt-reminder.cjs  # Phase progress reminders
+│   ├── awf-prompt-reminder.cjs  # Phase + DoD progress reminders
 │   ├── awf-subagent-context.cjs # Subagent context injection
 │   └── lib/awf-config.cjs       # Shared config loader
 └── settings.json           # Hooks auto-registered here
@@ -123,6 +125,10 @@ rm -rf ~/.claude/hooks/awf
 
 ## Key Features
 
+- **Document Framework** — 4-tier document hierarchy (MUST/GOOD/NICE/CONTEXT) with structured templates for PRD, API specs, ADRs
+- **Definition of Done** — Every phase requires explicit DoD; agents cannot self-declare completion
+- **Subagent Protocol** — Mandatory delegation for testing, review, and finalization (no DIY)
+- **Review Gates** — Blocking approval gates between phases (auto-approve in auto mode if score ≥ 9.5)
 - **Auto Language Detection** — responds in user's language (Vietnamese, English, etc.)
 - **Smart Proposal System** — AI proposes architecture, user approves
 - **Phase-based Development** — break features into manageable phases
