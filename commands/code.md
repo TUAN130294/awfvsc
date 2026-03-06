@@ -9,6 +9,8 @@ argument-hint: [task or phase]
 > Follow `shared/non-tech-mode.md` for communication style.
 > Follow `shared/rules.md` for safety rules.
 > Follow `shared/session-protocol.md` for checkpoints.
+> Follow `shared/doc-framework.md` for document standards.
+> Follow `shared/subagent-protocol.md` for mandatory delegation.
 > Load persona **Tuấn** from `shared/personas.md`.
 
 **Mission:** Code right, code clean, code safe. AUTO test and fix until pass.
@@ -29,6 +31,14 @@ argument-hint: [task or phase]
 /code all-phases  → Execute ALL phases sequentially
 /code [task desc] → Find spec in docs/specs/, Spec-Based mode
 /code (empty)     → Check session.json for current phase, or ask
+```
+
+### Pre-Code DoD Check (MANDATORY)
+Before writing ANY code, read the phase's `## Definition of Done` section.
+If DoD is missing, STOP and ask the user to define it first.
+Store DoD items in session.json for tracking:
+```json
+{ "working_on": { "dod": ["criteria 1", "criteria 2"], "dod_status": ["pending", "pending"] } }
 ```
 
 ### All-Phases Mode
@@ -78,11 +88,13 @@ If mockup from /visualize exists:
 
 ---
 
-## Stage 4: Auto Test Loop
+## Stage 4: Auto Test Loop (MUST delegate — see `shared/subagent-protocol.md`)
+
+**CRITICAL:** DO NOT write or run tests yourself. Spawn a `tester` subagent.
 
 ```
-Code done → Auto-run related tests
-├── PASS → Report success, continue
+Code done → Spawn tester subagent → Auto-run related tests
+├── PASS → Spawn code-reviewer subagent → Report
 └── FAIL → Fix Loop (max 3 attempts)
     ├── Attempt 1: Analyze → Fix → Retest
     ├── Attempt 2: Different approach → Retest
@@ -113,11 +125,28 @@ Follow `shared/session-protocol.md`:
 
 ---
 
-## Stage 6: Handover
+## Stage 6: Handover (MUST delegate — see `shared/subagent-protocol.md`)
 
-1. Report: "Done with [task]"
+**Finalization is MANDATORY and requires 3 subagents:**
+
+1. **`project-manager`** subagent → Update plan/phase status, mark complete
+2. **`docs-manager`** subagent → Update `./docs` if changes warrant
+3. **`git-manager`** subagent → Commit with conventional format (ask user)
+
+### DoD Verification (BLOCKING)
+Before handover, verify ALL Definition of Done items from phase file:
+- ✅ Every DoD checkbox must be checked
+- ❌ If any DoD item is not met → DO NOT claim complete
+- Report unmet items to user with remediation plan
+
+### Report Format
+1. "Done with [task]"
 2. Files changed: [list]
 3. Test status: ✅ All passed / ⚠️ X skipped
+4. DoD status: ✅ All met / ❌ [unmet items]
+5. Review score: [X/10]
+
+**Rule:** If workflow completes with 0 Task/subagent calls during testing/review/finalize, it is **INCOMPLETE**.
 
 ---
 

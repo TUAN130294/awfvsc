@@ -7,9 +7,10 @@ argument-hint: [feature]
 
 > Follow `shared/language-detect.md` — respond in user's language.
 > Follow `shared/non-tech-mode.md` for communication style.
+> Follow `shared/doc-framework.md` for document standards.
 > Load persona **Minh** from `shared/personas.md`.
 
-**Philosophy:** Plan = WHAT to build. Design = HOW to build it.
+**Philosophy:** Plan = WHAT to build. Design = HOW to build it. Always separate them.
 
 ---
 
@@ -86,14 +87,56 @@ Given: [condition] → When: [bad input] → Then: [error shown]
 
 ---
 
-## Stage 7: Create DESIGN.md
+## Stage 7: API Specification (MUST — see `shared/doc-framework.md`)
+
+Output structured API contracts:
+
+```markdown
+## API Contracts
+
+| Endpoint | Method | Request Body | Response | Auth | Status Codes |
+|----------|--------|-------------|----------|------|-------------|
+| /api/users | GET | — | User[] | Bearer | 200, 401 |
+| /api/users | POST | {name,email} | User | Bearer | 201, 400, 409 |
+```
+
+For complex APIs, use OpenAPI/JSON Schema format.
+
+---
+
+## Stage 8: Architecture Decisions
+
+If design involves trade-offs, create ADR in `decisions/`:
+
+```markdown
+## ADR-001: [Title]
+Date: [YYYY-MM-DD] | Status: Accepted
+
+### Context
+[Why this decision was needed]
+
+### Decision
+[What was decided and why]
+
+### Alternatives Considered
+[What was rejected and why]
+
+### Consequences
+[Trade-offs accepted]
+```
+
+---
+
+## Stage 9: Create DESIGN.md
 
 Save to `docs/DESIGN.md`:
 1. Database schema
-2. Screen list
-3. User journeys
-4. Acceptance criteria
-5. Test cases
+2. **API contracts** (structured table)
+3. Screen list
+4. User journeys
+5. Acceptance criteria
+6. Test cases
+7. **ADR references** (if any)
 
 ---
 

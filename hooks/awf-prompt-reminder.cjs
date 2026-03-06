@@ -45,12 +45,41 @@ try {
         if (session.working_on && session.working_on.task) {
           parts.push(`<awf-reminder>Task: ${session.working_on.task} (${session.working_on.status || 'active'})</awf-reminder>`);
         }
+        if (session.working_on && session.working_on.dod && session.working_on.dod.length > 0) {
+          const dodStatus = session.working_on.dod_status || [];
+          const pending = session.working_on.dod.filter((_, i) => dodStatus[i] !== 'done');
+          if (pending.length > 0) {
+            parts.push(`<awf-reminder>⚠️ DoD pending (${pending.length}): ${pending.slice(0, 3).join('; ')}${pending.length > 3 ? '...' : ''}</awf-reminder>`);
+          }
+        }
         if (session.skipped_tests && session.skipped_tests.length > 0) {
           parts.push(`<awf-reminder>⚠️ ${session.skipped_tests.length} skipped test(s) — must fix before deploy</awf-reminder>`);
         }
         break;
       } catch {}
     }
+  }
+
+  // Read DoD from current phase file
+  if (planPath) {
+    try {
+      const session = (() => { try { return JSON.parse(fs.readFileSync(path.join(process.cwd(), '.claude', 'rules', 'session.json'), 'utf8')); } catch { return {}; } })();
+      const currentPhase = session.working_on && session.working_on.current_phase;
+      if (currentPhase) {
+        const phaseFiles = fs.readdirSync(planPath).filter(f => f.includes(currentPhase));
+        if (phaseFiles.length) {
+          const phaseContent = fs.readFileSync(path.join(planPath, phaseFiles[0]), 'utf8');
+          const dodMatch = phaseContent.match(/## Definition of Done\n([\s\S]*?)(?=\n## |$)/);
+          if (dodMatch) {
+            const dodItems = dodMatch[1].trim().split('\n').filter(l => l.trim().startsWith('- ['));
+            const unchecked = dodItems.filter(l => l.includes('[ ]'));
+            if (unchecked.length > 0) {
+              parts.push(`<awf-reminder>📋 Phase DoD remaining: ${unchecked.length} item(s)</awf-reminder>`);
+            }
+          }
+        }
+      }
+    } catch {}
   }
 
   if (parts.length) {

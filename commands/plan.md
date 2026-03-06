@@ -107,23 +107,44 @@ Confirm?"
 
 ## Step 5: Auto Phase Generation
 
+> Follow `shared/doc-framework.md` for document standards.
+
 Create plan folder structure:
 ```
 plans/[YYMMDD]-[HHMM]-[feature-name]/
-├── plan.md                    # Overview + progress tracker
+├── plan.md                    # Overview + progress tracker + PRD
 ├── phase-01-setup.md          # Environment setup
 ├── phase-02-database.md       # Database schema
 ├── phase-03-backend.md        # API endpoints
 ├── phase-04-frontend.md       # UI components
 ├── phase-05-integration.md    # Connect FE + BE
 ├── phase-06-testing.md        # Test cases
-└── reports/
+├── reports/
+└── decisions/                 # ADR records (if any)
 ```
 
 ### plan.md structure:
 ```markdown
 # Plan: [Feature Name]
-Created: [timestamp] | Status: 🟡 In Progress
+Created: [timestamp] | Version: 1.0 | Status: 🟡 In Progress
+
+## PRD Summary
+### What
+[Core capability in 1 sentence]
+
+### User Stories
+| As a... | I want to... | So that... | Priority |
+|---------|-------------|------------|----------|
+
+### Constraints
+[Hard limits]
+
+### Out of Scope
+[Explicitly excluded]
+
+## API Contracts
+| Endpoint | Method | Request | Response | Auth |
+|----------|--------|---------|----------|------|
 
 ## Tech Stack
 ## Phases
@@ -132,6 +153,19 @@ Created: [timestamp] | Status: 🟡 In Progress
 | 01 | Setup | ⬜ Pending | 0% |
 ...
 ```
+
+### Phase File Requirements
+
+Every `phase-XX-*.md` MUST end with:
+```markdown
+## Definition of Done
+- [ ] [Specific, testable acceptance criteria]
+- [ ] All related tests passing
+- [ ] No critical/high issues in review
+- [ ] Documentation updated (if applicable)
+```
+
+Agents MUST NOT mark a phase complete unless ALL DoD items are checked.
 
 ### Smart Phase Detection
 - Simple (3-4 phases): Setup → Backend → Frontend → Test
@@ -143,7 +177,9 @@ Created: [timestamp] | Status: 🟡 In Progress
 ## Step 6: Save Spec
 
 Also save to `docs/specs/[feature]_spec.md`:
-Executive Summary, User Stories, Flowchart, Tech Stack, Build Checklist.
+Executive Summary, User Stories, API Contracts, Tech Stack, Build Checklist.
+
+If architectural decisions were made, create `decisions/ADR-001-[title].md` using template from `shared/doc-framework.md`.
 
 ---
 
